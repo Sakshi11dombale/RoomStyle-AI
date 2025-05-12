@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useToast } from "@/components/ui/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // Mock data for design styles
 const designStyles = [
@@ -32,31 +34,63 @@ const designStyles = [
   }
 ];
 
-// Mock data for furniture suggestions
+// Enhanced furniture suggestions with more reliable image sources and more items
 const furnitureSuggestions = [
   {
     id: 1,
     name: 'Eames-Inspired Lounge Chair',
     image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=500&q=80',
-    price: '$399'
+    price: '$399',
+    category: 'Seating'
   },
   {
     id: 2,
     name: 'Minimalist Coffee Table',
     image: 'https://images.unsplash.com/photo-1634712282287-14ed57b9cc14?w=500&q=80',
-    price: '$249'
+    price: '$249',
+    category: 'Tables'
   },
   {
     id: 3,
     name: 'Scandinavian Floor Lamp',
     image: 'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=500&q=80',
-    price: '$129'
+    price: '$129',
+    category: 'Lighting'
   },
   {
     id: 4,
     name: 'Modern Area Rug',
     image: 'https://images.unsplash.com/photo-1575414003880-7a77b5cd7459?w=500&q=80',
-    price: '$199'
+    price: '$199',
+    category: 'Textiles'
+  },
+  {
+    id: 5,
+    name: 'Mid-Century Bookshelf',
+    image: 'https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?w=500&q=80',
+    price: '$349',
+    category: 'Storage'
+  },
+  {
+    id: 6,
+    name: 'Accent Side Table',
+    image: 'https://images.unsplash.com/photo-1499933374294-4584851497cc?w=500&q=80',
+    price: '$129',
+    category: 'Tables'
+  },
+  {
+    id: 7, 
+    name: 'Nordic Dining Chair',
+    image: 'https://images.unsplash.com/photo-1551298370-9d3d53740c72?w=500&q=80',
+    price: '$185',
+    category: 'Seating'
+  },
+  {
+    id: 8,
+    name: 'Abstract Wall Art',
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=500&q=80',
+    price: '$95',
+    category: 'Decor'
   }
 ];
 
@@ -65,7 +99,18 @@ const RoomAnalyzer = () => {
   const [uploading, setUploading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [results, setResults] = useState<boolean>(false);
+  const [furnitureCategory, setFurnitureCategory] = useState<string>('All');
   const { toast } = useToast();
+  
+  // Add state to track if images fail to load
+  const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
+
+  const handleImageError = (id: number) => {
+    setFailedImages(prev => ({
+      ...prev,
+      [id]: true
+    }));
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -112,7 +157,16 @@ const RoomAnalyzer = () => {
   const resetAnalysis = () => {
     setImage(null);
     setResults(false);
+    setFailedImages({});
   };
+  
+  // Filter furniture by category
+  const filteredFurniture = furnitureCategory === 'All' 
+    ? furnitureSuggestions 
+    : furnitureSuggestions.filter(item => item.category === furnitureCategory);
+    
+  // Get unique categories for filtering
+  const categories = ['All', ...Array.from(new Set(furnitureSuggestions.map(item => item.category)))];
 
   return (
     <>
@@ -363,29 +417,89 @@ const RoomAnalyzer = () => {
                       
                       <TabsContent value="furniture" className="space-y-6">
                         <h3 className="font-serif text-xl font-semibold">Furniture Recommendations</h3>
-                        <p className="text-gray-600">
+                        <p className="text-gray-600 mb-4">
                           Based on your room's style and dimensions, here are some furniture pieces that would complement your space:
                         </p>
                         
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          {furnitureSuggestions.map((item) => (
-                            <div key={item.id} className="border rounded-lg overflow-hidden">
-                              <div className="h-48">
-                                <img 
-                                  src={item.image} 
-                                  alt={item.name} 
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
+                        {/* Category filters */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {categories.map((category) => (
+                            <Button
+                              key={category}
+                              variant={furnitureCategory === category ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => setFurnitureCategory(category)}
+                              className="text-xs"
+                            >
+                              {category}
+                            </Button>
+                          ))}
+                        </div>
+                        
+                        {/* Mobile Carousel View */}
+                        <div className="block md:hidden mb-6">
+                          <Carousel className="w-full">
+                            <CarouselContent>
+                              {filteredFurniture.map((item) => (
+                                <CarouselItem key={item.id} className="basis-full">
+                                  <div className="border rounded-lg overflow-hidden h-full">
+                                    {failedImages[item.id] ? (
+                                      <div className="bg-gray-100 h-48 flex items-center justify-center">
+                                        <p className="text-gray-500 text-sm">Image unavailable</p>
+                                      </div>
+                                    ) : (
+                                      <div className="h-48 overflow-hidden">
+                                        <img 
+                                          src={item.image} 
+                                          alt={item.name} 
+                                          className="w-full h-full object-cover"
+                                          onError={() => handleImageError(item.id)}
+                                          loading="lazy"
+                                        />
+                                      </div>
+                                    )}
+                                    <div className="p-4">
+                                      <h4 className="font-medium mb-1">{item.name}</h4>
+                                      <p className="text-sm text-gray-600">{item.price}</p>
+                                    </div>
+                                  </div>
+                                </CarouselItem>
+                              ))}
+                            </CarouselContent>
+                            <CarouselPrevious className="hidden sm:flex" />
+                            <CarouselNext className="hidden sm:flex" />
+                          </Carousel>
+                        </div>
+                        
+                        {/* Desktop Grid View */}
+                        <div className="hidden md:grid grid-cols-2 gap-4">
+                          {filteredFurniture.map((item) => (
+                            <div key={item.id} className="border rounded-lg overflow-hidden h-full">
+                              {failedImages[item.id] ? (
+                                <div className="bg-gray-100 h-48 flex items-center justify-center">
+                                  <p className="text-gray-500 text-sm">Image unavailable</p>
+                                </div>
+                              ) : (
+                                <div className="h-48 overflow-hidden">
+                                  <img 
+                                    src={item.image} 
+                                    alt={item.name} 
+                                    className="w-full h-full object-cover"
+                                    onError={() => handleImageError(item.id)}
+                                    loading="lazy"
+                                  />
+                                </div>
+                              )}
                               <div className="p-4">
                                 <h4 className="font-medium mb-1">{item.name}</h4>
                                 <p className="text-sm text-gray-600">{item.price}</p>
+                                <p className="text-xs text-gray-500 mt-1">{item.category}</p>
                               </div>
                             </div>
                           ))}
                         </div>
                         
-                        <div className="mt-4 text-center">
+                        <div className="mt-6 text-center">
                           <Button variant="outline">
                             View More Suggestions
                           </Button>
