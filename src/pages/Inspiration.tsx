@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Gallery, Search } from 'lucide-react';
+import { GalleryHorizontal, Search } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // Enhanced inspiration data with more items and reliable image sources
@@ -189,7 +189,7 @@ const Inspiration = () => {
                 onClick={() => setViewMode('grid')}
                 title="Grid View"
               >
-                <Gallery className="h-4 w-4" />
+                <GalleryHorizontal className="h-4 w-4" />
               </Button>
               <Button 
                 variant="outline" 
