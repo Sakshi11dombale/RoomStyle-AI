@@ -56,7 +56,9 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/profile">Profile</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/settings">Settings</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
               </DropdownMenuContent>
@@ -98,9 +100,14 @@ const Header = () => {
                   </Link>
                 )}
                 {user && (
-                  <Button variant="outline" onClick={() => signOut()}>
-                    Sign Out
-                  </Button>
+                  <>
+                    <Link to="/settings" className="text-lg font-medium hover:text-design-terracotta">
+                      Settings
+                    </Link>
+                    <Button variant="outline" onClick={() => signOut()}>
+                      Sign Out
+                    </Button>
+                  </>
                 )}
               </div>
             </SheetContent>
