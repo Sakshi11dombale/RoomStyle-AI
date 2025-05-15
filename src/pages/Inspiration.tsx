@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -133,7 +132,6 @@ const Inspiration = () => {
   const handleFilterChange = (filterId: string) => {
     setActiveFilter(filterId);
     setCurrentPage(1);
-    
     if (filterId === "all") {
       setInspirations(inspirationData);
     } else {
@@ -142,11 +140,17 @@ const Inspiration = () => {
     }
   };
 
-  // Calculate pagination
+  // NEW: Remove duplicates before paginating
+  const uniqueInspirations = inspirations.filter(
+    (item, idx, self) =>
+      self.findIndex(t => t.image === item.image) === idx
+  );
+
+  // Calculate pagination on unique inspirations
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = inspirations.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(inspirations.length / itemsPerPage);
+  const currentItems = uniqueInspirations.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(uniqueInspirations.length / itemsPerPage);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
