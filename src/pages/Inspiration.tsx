@@ -140,11 +140,16 @@ const Inspiration = () => {
     }
   };
 
-  // NEW: Remove duplicates before paginating
-  const uniqueInspirations = inspirations.filter(
-    (item, idx, self) =>
-      self.findIndex(t => t.image === item.image) === idx
-  );
+  // Remove duplicates by both image URL and (case-insensitive) title
+  const uniqueInspirations = inspirations.filter((item, idx, self) => {
+    return (
+      self.findIndex(
+        t =>
+          t.image === item.image ||
+          t.title.trim().toLowerCase() === item.title.trim().toLowerCase()
+      ) === idx
+    );
+  });
 
   // Calculate pagination on unique inspirations
   const indexOfLastItem = currentPage * itemsPerPage;
