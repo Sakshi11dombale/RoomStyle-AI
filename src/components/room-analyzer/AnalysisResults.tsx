@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,6 +5,7 @@ import RoomDetails from './RoomDetails';
 import StylesTab from './StylesTab';
 import ColorsTab from './ColorsTab';
 import FurnitureTab from './FurnitureTab';
+import InfrastructureSummary from './InfrastructureSummary';
 
 interface DesignStyle {
   id: string;
@@ -80,6 +80,9 @@ const AnalysisResults = ({
           </Tabs>
         </div>
       </div>
+
+      {/* Added Infrastructure Condition Summary below analysis results */}
+      <InfrastructureSummary />
     </div>
   );
 };
