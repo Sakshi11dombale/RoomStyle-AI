@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,7 +6,8 @@ import RoomDetails from './RoomDetails';
 import StylesTab from './StylesTab';
 import ColorsTab from './ColorsTab';
 import FurnitureTab from './FurnitureTab';
-import InfrastructureSummary from './InfrastructureSummary';
+// Removed InfrastructureSummary import
+import RoomInsightsTab from './RoomInsightsTab';
 
 interface DesignStyle {
   id: string;
@@ -60,6 +62,7 @@ const AnalysisResults = ({
               <TabsTrigger value="styles" className="flex-1">Styles</TabsTrigger>
               <TabsTrigger value="colors" className="flex-1">Color Palette</TabsTrigger>
               <TabsTrigger value="furniture" className="flex-1">Furniture</TabsTrigger>
+              <TabsTrigger value="insights" className="flex-1">Room Insights</TabsTrigger>
             </TabsList>
             
             <TabsContent value="styles">
@@ -77,12 +80,13 @@ const AnalysisResults = ({
                 handleImageError={handleImageError}
               />
             </TabsContent>
+
+            <TabsContent value="insights">
+              <RoomInsightsTab />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
-
-      {/* Added Infrastructure Condition Summary below analysis results */}
-      <InfrastructureSummary />
     </div>
   );
 };
