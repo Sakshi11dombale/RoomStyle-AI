@@ -2,6 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ruler, Home, Layers3, Wrench } from "lucide-react";
+import AmenitiesSummary from "./AmenitiesSummary";
 
 // Demo amenity recommendations (can be expanded or made dynamic)
 const amenityExamples = [
@@ -48,6 +49,7 @@ export default function RoomInsightsTab() {
 
   return (
     <div className="space-y-7">
+      <AmenitiesSummary />
       <Card>
         <CardHeader className="border-b pb-4">
           <CardTitle className="flex gap-2 items-center text-lg font-serif">
@@ -66,7 +68,6 @@ export default function RoomInsightsTab() {
           </div>
         </CardContent>
       </Card>
-
       <Card>
         <CardHeader className="border-b pb-4">
           <CardTitle className="flex gap-2 items-center text-lg font-serif">
@@ -88,7 +89,6 @@ export default function RoomInsightsTab() {
           </ul>
         </CardContent>
       </Card>
-
       <Card>
         <CardHeader className="border-b pb-4">
           <CardTitle className="flex gap-2 items-center text-lg font-serif">
