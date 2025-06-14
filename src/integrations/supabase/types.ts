@@ -9,6 +9,76 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      design_analyses: {
+        Row: {
+          color_palette: Json
+          created_at: string
+          furniture_suggestions: Json
+          id: string
+          room_upload_id: string
+          style: string
+        }
+        Insert: {
+          color_palette: Json
+          created_at?: string
+          furniture_suggestions: Json
+          id?: string
+          room_upload_id: string
+          style: string
+        }
+        Update: {
+          color_palette?: Json
+          created_at?: string
+          furniture_suggestions?: Json
+          id?: string
+          room_upload_id?: string
+          style?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_analyses_room_upload_id_fkey"
+            columns: ["room_upload_id"]
+            isOneToOne: false
+            referencedRelation: "room_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      design_chats: {
+        Row: {
+          created_at: string
+          id: string
+          is_ai: boolean
+          message: string
+          room_upload_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_ai?: boolean
+          message: string
+          room_upload_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_ai?: boolean
+          message?: string
+          room_upload_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_chats_room_upload_id_fkey"
+            columns: ["room_upload_id"]
+            isOneToOne: false
+            referencedRelation: "room_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedback: {
         Row: {
           content: string
@@ -45,6 +115,27 @@ export type Database = {
           id?: string
           updated_at?: string | null
           username?: string | null
+        }
+        Relationships: []
+      }
+      room_uploads: {
+        Row: {
+          created_at: string
+          id: string
+          image_path: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_path: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_path?: string
+          user_id?: string | null
         }
         Relationships: []
       }
