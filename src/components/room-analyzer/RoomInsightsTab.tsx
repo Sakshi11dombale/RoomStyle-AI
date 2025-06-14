@@ -2,7 +2,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ruler, Home, Layers3, Wrench } from "lucide-react";
-import AmenitiesSummary from "./AmenitiesSummary";
 
 interface RoomInsightsTabProps {
   image?: string;
@@ -118,7 +117,6 @@ export default function RoomInsightsTab({ image }: RoomInsightsTabProps) {
 
   return (
     <div className="space-y-7">
-      <AmenitiesSummary />
       <Card>
         <CardHeader className="border-b pb-4">
           <CardTitle className="flex gap-2 items-center text-lg font-serif">
