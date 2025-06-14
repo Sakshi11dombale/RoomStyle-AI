@@ -7,21 +7,26 @@ interface RoomDetailsProps {
 }
 
 const RoomDetails = ({ image }: RoomDetailsProps) => {
-  // Generate varied analysis results based on image data
+  // Generate varied analysis results based on image data with better seeding
   const getRandomAnalysis = () => {
-    const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Dining Room', 'Office', 'Bathroom'];
-    const sizes = ['Small (8\' x 10\')', 'Medium (12\' x 14\')', 'Large (16\' x 20\')', 'Extra Large (20\' x 24\')'];
-    const lightLevels = ['Low', 'Moderate', 'Bright', 'Very Bright'];
-    const styles = ['Modern', 'Traditional', 'Transitional', 'Contemporary', 'Minimalist', 'Rustic'];
+    const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Dining Room', 'Office', 'Bathroom', 'Study Room', 'Family Room'];
+    const sizes = ['Small (8\' x 10\')', 'Medium (12\' x 14\')', 'Large (16\' x 20\')', 'Extra Large (20\' x 24\')', 'Compact (6\' x 8\')', 'Spacious (18\' x 22\')'];
+    const lightLevels = ['Low', 'Moderate', 'Bright', 'Very Bright', 'Dim', 'Well-lit'];
+    const styles = ['Modern', 'Traditional', 'Transitional', 'Contemporary', 'Minimalist', 'Rustic', 'Industrial', 'Bohemian', 'Scandinavian'];
     
-    // Use image length as a simple seed for consistent results per image
-    const seed = image.length % 100;
+    // Create a more complex seed using multiple characteristics of the image
+    const seed1 = image.length;
+    const seed2 = image.charCodeAt(Math.floor(image.length / 4)) || 1;
+    const seed3 = image.charCodeAt(Math.floor(image.length / 2)) || 1;
+    const seed4 = image.charCodeAt(Math.floor(image.length * 3 / 4)) || 1;
+    
+    const combinedSeed = (seed1 + seed2 + seed3 + seed4);
     
     return {
-      roomType: roomTypes[seed % roomTypes.length],
-      size: sizes[(seed * 2) % sizes.length],
-      lightLevel: lightLevels[(seed * 3) % lightLevels.length],
-      style: styles[(seed * 4) % styles.length]
+      roomType: roomTypes[combinedSeed % roomTypes.length],
+      size: sizes[(combinedSeed * 7) % sizes.length],
+      lightLevel: lightLevels[(combinedSeed * 13) % lightLevels.length],
+      style: styles[(combinedSeed * 19) % styles.length]
     };
   };
 
