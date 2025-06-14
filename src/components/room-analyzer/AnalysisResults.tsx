@@ -6,7 +6,6 @@ import RoomDetails from './RoomDetails';
 import StylesTab from './StylesTab';
 import ColorsTab from './ColorsTab';
 import FurnitureTab from './FurnitureTab';
-// Removed InfrastructureSummary import
 import RoomInsightsTab from './RoomInsightsTab';
 
 interface DesignStyle {
@@ -66,11 +65,11 @@ const AnalysisResults = ({
             </TabsList>
             
             <TabsContent value="styles">
-              <StylesTab designStyles={designStyles} />
+              <StylesTab designStyles={designStyles} image={image} />
             </TabsContent>
             
             <TabsContent value="colors">
-              <ColorsTab />
+              <ColorsTab image={image} />
             </TabsContent>
             
             <TabsContent value="furniture">
@@ -82,7 +81,7 @@ const AnalysisResults = ({
             </TabsContent>
 
             <TabsContent value="insights">
-              <RoomInsightsTab />
+              <RoomInsightsTab image={image} />
             </TabsContent>
           </Tabs>
         </div>
