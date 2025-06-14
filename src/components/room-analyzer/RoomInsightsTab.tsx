@@ -8,14 +8,17 @@ interface RoomInsightsTabProps {
 }
 
 export default function RoomInsightsTab({ image }: RoomInsightsTabProps) {
-  // Generate varied room insights based on image with better variation
+  // Generate varied room insights with much better variation
   const getRandomInsights = () => {
     const dimensionSets = [
+      { widths: [8, 10, 12], lengths: [10, 12, 14] },
+      { widths: [12, 14, 16], lengths: [14, 16, 18] },
+      { widths: [16, 18, 20], lengths: [18, 20, 22] },
       { widths: [10, 12, 14], lengths: [12, 14, 16] },
       { widths: [14, 16, 18], lengths: [16, 18, 20] },
-      { widths: [8, 10, 12], lengths: [10, 12, 14] },
-      { widths: [16, 18, 20], lengths: [18, 20, 22] },
-      { widths: [12, 14, 16], lengths: [14, 16, 18] }
+      { widths: [18, 20, 22], lengths: [20, 22, 24] },
+      { widths: [6, 8, 10], lengths: [8, 10, 12] },
+      { widths: [20, 22, 24], lengths: [22, 24, 26] }
     ];
     
     const conditionSets = [
@@ -38,6 +41,16 @@ export default function RoomInsightsTab({ image }: RoomInsightsTabProps) {
         "Contemporary design with open concept layout and energy-efficient systems integration.",
         "Modern construction with smart home potential and updated infrastructure throughout.",
         "Current building standards with sustainable materials and efficient space utilization."
+      ],
+      [
+        "Vintage charm with original hardwood floors and period-appropriate molding details.",
+        "Historic property with carefully preserved architectural elements and character features.",
+        "Pre-war construction with high ceilings and quality craftsmanship throughout."
+      ],
+      [
+        "Newly constructed space with latest building codes and energy-efficient materials.",
+        "State-of-the-art infrastructure with smart home integration and modern amenities.",
+        "Contemporary design with sustainable materials and green building practices."
       ]
     ];
     
@@ -56,16 +69,27 @@ export default function RoomInsightsTab({ image }: RoomInsightsTabProps) {
         "High-efficiency systems with programmable controls and advanced air filtration integration.",
         "Premium mechanical systems with extended warranties and professional monitoring capabilities.",
         "Top-tier infrastructure with smart integration and energy management system controls."
+      ],
+      [
+        "Vintage systems with character but may benefit from modernization for efficiency.",
+        "Classic mechanical infrastructure, reliable but consider upgrades for energy savings.",
+        "Traditional systems in good working order, modernization would enhance performance."
       ]
     ];
     
-    // Create better seed variation
-    const seed1 = image ? image.length : 50;
-    const seed2 = image ? (image.charCodeAt(Math.floor(image.length / 6)) || 1) : 15;
-    const seed3 = image ? (image.charCodeAt(Math.floor(image.length / 3)) || 1) : 30;
-    const seed4 = image ? (image.charCodeAt(Math.floor(image.length * 2 / 3)) || 1) : 60;
+    // Create a hash from the image string
+    let hash = 0;
+    if (image) {
+      for (let i = 0; i < image.length; i++) {
+        const char = image.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+    }
     
-    const combinedSeed = (seed1 + seed2 * 5 + seed3 * 9 + seed4 * 13);
+    // Use current timestamp for additional variation
+    const timestamp = Date.now();
+    const combinedSeed = Math.abs((hash || 789) + timestamp);
     
     const dimSet = dimensionSets[combinedSeed % dimensionSets.length];
     const condSet = conditionSets[(combinedSeed * 2) % conditionSets.length];
@@ -110,7 +134,7 @@ export default function RoomInsightsTab({ image }: RoomInsightsTabProps) {
             <strong>Length:</strong> {insights.length}' <br />
             <strong>Approx. Area:</strong> {estimatedArea} sq ft &nbsp;
             <span className="ml-2 text-xs bg-design-cream px-2 py-0.5 rounded font-semibold text-design-charcoal">
-              {estimatedArea < 150 ? 'Small Room' : estimatedArea < 250 ? 'Medium-sized Room' : 'Large Room'}
+              {estimatedArea < 120 ? 'Small Room' : estimatedArea < 200 ? 'Medium-sized Room' : estimatedArea < 300 ? 'Large Room' : 'Extra Large Room'}
             </span>
           </div>
         </CardContent>

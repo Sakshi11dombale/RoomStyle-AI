@@ -15,7 +15,7 @@ interface StylesTabProps {
 }
 
 const StylesTab = ({ designStyles, image }: StylesTabProps) => {
-  // Generate varied styles based on image with improved variation
+  // Generate varied styles with much better variation
   const getVariedStyles = () => {
     const styleCollections = [
       [
@@ -42,16 +42,27 @@ const StylesTab = ({ designStyles, image }: StylesTabProps) => {
         { id: '1', name: 'Coastal', description: 'Light, airy spaces inspired by seaside living with nautical touches and a relaxed, beachy atmosphere.', confidence: 86, colors: ['#F0F8FF', '#87CEEB', '#F5DEB3', '#20B2AA'] },
         { id: '2', name: 'Traditional', description: 'Classic elegance with rich fabrics, ornate details, and time-honored furniture pieces for sophisticated comfort.', confidence: 81, colors: ['#8B0000', '#FFD700', '#228B22', '#191970'] },
         { id: '3', name: 'Urban Modern', description: 'Sleek city living with high-tech amenities, bold contrasts, and efficient use of space for contemporary lifestyle.', confidence: 77, colors: ['#000000', '#FFFFFF', '#FF4500', '#C0C0C0'] }
+      ],
+      [
+        { id: '1', name: 'Japanese Zen', description: 'Serene simplicity with natural materials, neutral colors, and uncluttered spaces for peaceful meditation.', confidence: 89, colors: ['#F5F5DC', '#8FBC8F', '#696969', '#2F4F4F'] },
+        { id: '2', name: 'Victorian', description: 'Ornate details, rich colors, and luxurious fabrics create an atmosphere of historical elegance and grandeur.', confidence: 84, colors: ['#8B008B', '#DAA520', '#8B0000', '#2F4F4F'] },
+        { id: '3', name: 'Modern Farmhouse', description: 'Updated country style with clean lines, shiplap details, and a fresh take on rural living.', confidence: 80, colors: ['#FFFFFF', '#708090', '#D2B48C', '#A0522D'] }
       ]
     ];
     
-    // Create better seed variation using multiple image characteristics
-    const seed1 = image ? image.length : 50;
-    const seed2 = image ? (image.charCodeAt(Math.floor(image.length / 4)) || 1) : 25;
-    const seed3 = image ? (image.charCodeAt(Math.floor(image.length / 2)) || 1) : 75;
-    const seed4 = image ? (image.charCodeAt(Math.floor(image.length * 3 / 4)) || 1) : 100;
+    // Create a hash from the image string
+    let hash = 0;
+    if (image) {
+      for (let i = 0; i < image.length; i++) {
+        const char = image.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+    }
     
-    const combinedSeed = (seed1 + seed2 * 11 + seed3 * 17 + seed4 * 23);
+    // Use current timestamp for additional variation
+    const timestamp = Date.now();
+    const combinedSeed = Math.abs((hash || 123) + timestamp);
     
     return styleCollections[combinedSeed % styleCollections.length];
   };

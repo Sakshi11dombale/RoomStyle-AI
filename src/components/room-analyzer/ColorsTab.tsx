@@ -6,7 +6,7 @@ interface ColorsTabProps {
 }
 
 const ColorsTab = ({ image }: ColorsTabProps) => {
-  // Generate varied color palettes based on image with better variation
+  // Generate varied color palettes with much better variation
   const getVariedPalettes = () => {
     const paletteCollections = [
       {
@@ -32,16 +32,30 @@ const ColorsTab = ({ image }: ColorsTabProps) => {
       {
         primary: { colors: ['#8B4513', '#A0522D', '#CD853F', '#DEB887', '#F5DEB3'], description: 'Rich, earthy browns and tans create a grounded, natural feeling. Ideal for rustic or traditional design styles.' },
         accent: { colors: ['#228B22', '#32CD32', '#ADFF2F'], description: 'Fresh green accents bring life and energy, mimicking natural foliage against earth tones.' }
+      },
+      {
+        primary: { colors: ['#000000', '#2F2F2F', '#696969', '#A9A9A9', '#FFFFFF'], description: 'A bold monochromatic palette with dramatic contrast. Perfect for modern, minimalist, or industrial design schemes.' },
+        accent: { colors: ['#FF4500', '#FFD700', '#DC143C'], description: 'Vibrant accent colors add energy and focal points to the neutral monochrome base.' }
+      },
+      {
+        primary: { colors: ['#FFF8DC', '#F0E68C', '#DDA0DD', '#98FB98', '#87CEEB'], description: 'A soft, pastel collection inspired by spring gardens. Creates a cheerful, optimistic atmosphere.' },
+        accent: { colors: ['#FF69B4', '#32CD32', '#FF6347'], description: 'Bright, playful accents that enhance the gentle primary palette with bursts of energy.' }
       }
     ];
     
-    // Create better seed variation using multiple image characteristics
-    const seed1 = image ? image.length : 50;
-    const seed2 = image ? (image.charCodeAt(Math.floor(image.length / 5)) || 1) : 20;
-    const seed3 = image ? (image.charCodeAt(Math.floor(image.length / 3)) || 1) : 33;
-    const seed4 = image ? (image.charCodeAt(Math.floor(image.length * 4 / 5)) || 1) : 80;
+    // Create a hash from the image string
+    let hash = 0;
+    if (image) {
+      for (let i = 0; i < image.length; i++) {
+        const char = image.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+    }
     
-    const combinedSeed = (seed1 + seed2 * 3 + seed3 * 7 + seed4 * 11);
+    // Use current timestamp for additional variation
+    const timestamp = Date.now();
+    const combinedSeed = Math.abs((hash || 456) + timestamp);
     
     return paletteCollections[combinedSeed % paletteCollections.length];
   };

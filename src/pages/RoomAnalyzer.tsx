@@ -24,7 +24,7 @@ const RoomAnalyzer = () => {
     }));
   };
 
-  // Generate varied furniture suggestions based on image with better variation
+  // Generate varied furniture suggestions with much better variation
   const generateFurnitureSuggestions = (imageData: string) => {
     const furnitureCollections = [
       // Modern Bedroom Collection
@@ -80,16 +80,38 @@ const RoomAnalyzer = () => {
         { id: 34, name: "Hidden Storage Ottoman", image: "https://images.unsplash.com/photo-1586772002681-b8b3c80755a5?w=400&q=80", price: "$199", category: "Storage" },
         { id: 35, name: "Single Accent Chair", image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&q=80", price: "$399", category: "Seating" },
         { id: 36, name: "Neutral Throw Blanket", image: "https://images.unsplash.com/photo-1584627904197-cd79cfbc6ccf?w=400&q=80", price: "$89", category: "Decor" }
+      ],
+      // Rustic Collection
+      [
+        { id: 37, name: "Reclaimed Wood Bed", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80", price: "$1099", category: "Bedroom" },
+        { id: 38, name: "Barn Door Wardrobe", image: "https://images.unsplash.com/photo-1586772002681-b8b3c80755a5?w=400&q=80", price: "$899", category: "Storage" },
+        { id: 39, name: "Farmhouse Dining Set", image: "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?w=400&q=80", price: "$1299", category: "Tables" },
+        { id: 40, name: "Mason Jar Chandelier", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80", price: "$259", category: "Lighting" },
+        { id: 41, name: "Leather Recliner", image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&q=80", price: "$799", category: "Seating" },
+        { id: 42, name: "Woven Basket Set", image: "https://images.unsplash.com/photo-1618220048045-10a6dbdf83e0?w=400&q=80", price: "$129", category: "Decor" }
+      ],
+      // Industrial Collection
+      [
+        { id: 43, name: "Metal Frame Bed", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80", price: "$799", category: "Bedroom" },
+        { id: 44, name: "Pipe Clothing Rack", image: "https://images.unsplash.com/photo-1586772002681-b8b3c80755a5?w=400&q=80", price: "$199", category: "Storage" },
+        { id: 45, name: "Industrial Bar Stools", image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&q=80", price: "$299", category: "Seating" },
+        { id: 46, name: "Edison Bulb Pendant", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80", price: "$149", category: "Lighting" },
+        { id: 47, name: "Metal Bookcase", image: "https://images.unsplash.com/photo-1586772002681-b8b3c80755a5?w=400&q=80", price: "$399", category: "Storage" },
+        { id: 48, name: "Concrete Planters", image: "https://images.unsplash.com/photo-1618220048045-10a6dbdf83e0?w=400&q=80", price: "$89", category: "Decor" }
       ]
     ];
     
-    // Create better seed variation using multiple image characteristics
-    const seed1 = imageData.length;
-    const seed2 = imageData.charCodeAt(Math.floor(imageData.length / 3)) || 1;
-    const seed3 = imageData.charCodeAt(Math.floor(imageData.length / 2)) || 1;
-    const seed4 = imageData.charCodeAt(Math.floor(imageData.length * 2 / 3)) || 1;
+    // Create a hash from the image string
+    let hash = 0;
+    for (let i = 0; i < imageData.length; i++) {
+      const char = imageData.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
     
-    const combinedSeed = (seed1 + seed2 * 7 + seed3 * 13 + seed4 * 19);
+    // Use current timestamp for additional randomness
+    const timestamp = Date.now();
+    const combinedSeed = Math.abs(hash + timestamp);
     
     return furnitureCollections[combinedSeed % furnitureCollections.length];
   };

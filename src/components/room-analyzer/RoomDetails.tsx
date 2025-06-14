@@ -7,26 +7,36 @@ interface RoomDetailsProps {
 }
 
 const RoomDetails = ({ image }: RoomDetailsProps) => {
-  // Generate varied analysis results based on image data with better seeding
+  // Generate varied analysis results with much better seeding
   const getRandomAnalysis = () => {
-    const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Dining Room', 'Office', 'Bathroom', 'Study Room', 'Family Room'];
-    const sizes = ['Small (8\' x 10\')', 'Medium (12\' x 14\')', 'Large (16\' x 20\')', 'Extra Large (20\' x 24\')', 'Compact (6\' x 8\')', 'Spacious (18\' x 22\')'];
-    const lightLevels = ['Low', 'Moderate', 'Bright', 'Very Bright', 'Dim', 'Well-lit'];
-    const styles = ['Modern', 'Traditional', 'Transitional', 'Contemporary', 'Minimalist', 'Rustic', 'Industrial', 'Bohemian', 'Scandinavian'];
+    const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Dining Room', 'Office', 'Bathroom', 'Study Room', 'Family Room', 'Guest Room', 'Master Bedroom'];
+    const sizes = ['Small (8\' x 10\')', 'Medium (12\' x 14\')', 'Large (16\' x 20\')', 'Extra Large (20\' x 24\')', 'Compact (6\' x 8\')', 'Spacious (18\' x 22\')', 'Cozy (10\' x 12\')', 'Grand (24\' x 28\')'];
+    const lightLevels = ['Low', 'Moderate', 'Bright', 'Very Bright', 'Dim', 'Well-lit', 'Natural Light Rich', 'Ambient'];
+    const styles = ['Modern', 'Traditional', 'Transitional', 'Contemporary', 'Minimalist', 'Rustic', 'Industrial', 'Bohemian', 'Scandinavian', 'Mediterranean'];
     
-    // Create a more complex seed using multiple characteristics of the image
-    const seed1 = image.length;
-    const seed2 = image.charCodeAt(Math.floor(image.length / 4)) || 1;
-    const seed3 = image.charCodeAt(Math.floor(image.length / 2)) || 1;
-    const seed4 = image.charCodeAt(Math.floor(image.length * 3 / 4)) || 1;
+    // Create a hash-like seed from the image string
+    let hash = 0;
+    for (let i = 0; i < image.length; i++) {
+      const char = image.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
     
-    const combinedSeed = (seed1 + seed2 + seed3 + seed4);
+    // Use current timestamp to add more randomness
+    const timestamp = Date.now();
+    const combinedSeed = Math.abs(hash + timestamp);
+    
+    // Generate different indices using the combined seed
+    const roomIndex = combinedSeed % roomTypes.length;
+    const sizeIndex = (combinedSeed * 7 + timestamp) % sizes.length;
+    const lightIndex = (combinedSeed * 13 + timestamp * 3) % lightLevels.length;
+    const styleIndex = (combinedSeed * 19 + timestamp * 7) % styles.length;
     
     return {
-      roomType: roomTypes[combinedSeed % roomTypes.length],
-      size: sizes[(combinedSeed * 7) % sizes.length],
-      lightLevel: lightLevels[(combinedSeed * 13) % lightLevels.length],
-      style: styles[(combinedSeed * 19) % styles.length]
+      roomType: roomTypes[roomIndex],
+      size: sizes[sizeIndex],
+      lightLevel: lightLevels[lightIndex],
+      style: styles[styleIndex]
     };
   };
 
